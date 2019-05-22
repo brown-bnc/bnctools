@@ -1,3 +1,6 @@
+# Private environment variables
+.env
+
 # Temporary and binary files
 *~
 *.py[cod]
