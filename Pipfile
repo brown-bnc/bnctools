@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 tox = "*"
+pylint = "*"
 
 [packages]
 bnctools = {editable = true,path = "."}
