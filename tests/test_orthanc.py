@@ -11,7 +11,7 @@ from orthanc_rest_client import Orthanc
 
 
 __author__ = "Isabel Restrepo"
-__copyright__ = "Isabel Restrepo"
+__copyright__ = "CCV"
 __license__ = "mit"
 
 
@@ -32,8 +32,4 @@ def test_export_stable_study():
 
     files = glob.glob(outdir + "**/**/*.dcm", recursive=True)
 
-    print (len(files))
-
-    # assert
-
-test_export_stable_study()
+    assert len(files) == 5
