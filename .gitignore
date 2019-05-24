@@ -1,6 +1,12 @@
 # Private environment variables
 .env
 
+# VScode
+.DS_Store
+
+# Tests
+*deleteme*
+
 # Temporary and binary files
 *~
 *.py[cod]
