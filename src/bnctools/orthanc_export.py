@@ -130,7 +130,7 @@ def parse_args(args):
         help="Password for Orthanc server",
         type=str)
     parser.add_argument(
-        dest="out",
+        dest="outdir",
         help="Parent output directory",
         type=str)
     parser.add_argument(
