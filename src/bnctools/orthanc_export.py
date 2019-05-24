@@ -1,19 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This is a skeleton file that can serve as a starting point for a Python
-console script. To run this script uncomment the following lines in the
-[options.entry_points] section in setup.cfg:
+This is Python console script to export DICOM files from an Orthanc instance.
+The output directory structure is compatible with bidsfy
 
-    console_scripts =
-         fibonacci = bnctools.skeleton:run
-
-Then run `python setup.py install` which will install the command `fibonacci`
-inside your current environment.
-Besides console scripts, the header (i.e. until _logger...) of this file can
-also be used as template for Python modules.
-
-Note: This skeleton file can be safely removed if not needed!
+Example:
+```
+orthanc_export http://localhost:8042/ orthanc orthanc /dicom_export studyid
+```
 """
 
 import argparse
