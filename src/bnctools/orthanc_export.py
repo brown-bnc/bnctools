@@ -61,9 +61,9 @@ def export_stable_study(orthanc, study_id, outdir):
                                 
     study_path =  normalize_path(outdir + '/' + labname + '/' + study_dicom_tags["StudyDate"] + '_' + study_dicom_tags["StudyDescription"])
 
-    print("--------------------------------------------")
-    print("Study Path " + study_path)
-    print("--------------------------------------------")
+    _logger.info("--------------------------------------------")
+    _logger.info("Study Path " + study_path)
+    _logger.info("--------------------------------------------")
 
 
     if not os.path.exists(study_path):
@@ -71,15 +71,15 @@ def export_stable_study(orthanc, study_id, outdir):
 
     for s in series:
 
-        print("--------------------------------------------")
-        print("Processing DICOM Series " + s)
+        _logger.info("--------------------------------------------")
+        _logger.info("Processing DICOM Series " + s)
 
         series_json = orthanc.get_one_series(s)
         series_dicom_tags = series_json["MainDicomTags"]
         instances = series_json["Instances"]
 
 
-        for i in instances[0:1]:
+        for i in instances:
             instance_tags = orthanc.get_instance_simplified_tags(instances[0])
 
             dicom_path = normalize_path(study_path + '/' + "part-" + instance_tags["PatientName"] 
@@ -87,8 +87,6 @@ def export_stable_study(orthanc, study_id, outdir):
             
             if not os.path.exists(dicom_path):
                 os.makedirs(dicom_path)
-
-            print(".", end ="")
 
 
             dicom = orthanc.get_instance_file(i)
@@ -98,7 +96,7 @@ def export_stable_study(orthanc, study_id, outdir):
                 f.write(chunk)
             f.close()
 
-        print("--------------------------------------------")
+        _logger.info("--------------------------------------------")
 
 
 
