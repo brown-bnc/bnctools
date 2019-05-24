@@ -120,23 +120,23 @@ def parse_args(args):
     parser.add_argument(
         dest="url",
         help="url of Orthanc server",
-        type=str,
-        metavar="STR")
+        type=str)
     parser.add_argument(
         dest="user",
         help="User for Orthanc server",
-        type=str,
-        metavar="STR")
+        type=str)
     parser.add_argument(
         dest="psswd",
         help="Password for Orthanc server",
-        type=str,
-        metavar="STR")
+        type=str)
     parser.add_argument(
         dest="out",
         help="Parent output directory",
-        type=str,
-        metavar="STR")
+        type=str)
+    parser.add_argument(
+        dest="study_id",
+        help="Study ID",
+        type=str)
     parser.add_argument(
         '-v',
         '--verbose',
