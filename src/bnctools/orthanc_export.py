@@ -24,6 +24,8 @@ import os
 import os.path
 import sys
 import re
+from requests.auth import HTTPBasicAuth
+from orthanc_rest_client import Orthanc
 
 from bnctools import __version__
 
@@ -59,9 +61,9 @@ def export_stable_study(orthanc, study_id, outdir):
                                 
     study_path =  normalize_path(outdir + '/' + labname + '/' + study_dicom_tags["StudyDate"] + '_' + study_dicom_tags["StudyDescription"])
 
-    print("--------------------------------------------")
-    print("Study Path " + study_path)
-    print("--------------------------------------------")
+    _logger.info("--------------------------------------------")
+    _logger.info("Study Path " + study_path)
+    _logger.info("--------------------------------------------")
 
 
     if not os.path.exists(study_path):
@@ -69,8 +71,8 @@ def export_stable_study(orthanc, study_id, outdir):
 
     for s in series:
 
-        print("--------------------------------------------")
-        print("Processing DICOM Series " + s)
+        _logger.info("--------------------------------------------")
+        _logger.info("Processing DICOM Series " + s)
 
         series_json = orthanc.get_one_series(s)
         series_dicom_tags = series_json["MainDicomTags"]
@@ -86,7 +88,7 @@ def export_stable_study(orthanc, study_id, outdir):
             if not os.path.exists(dicom_path):
                 os.makedirs(dicom_path)
 
-            print(".", end ="")
+            _logger.info(".", end ="")
 
 
             dicom = orthanc.get_instance_file(i)
@@ -96,7 +98,7 @@ def export_stable_study(orthanc, study_id, outdir):
                 f.write(chunk)
             f.close()
 
-        print("--------------------------------------------")
+        _logger.info("--------------------------------------------")
 
 
 
@@ -171,9 +173,9 @@ def main(args):
     """
     args = parse_args(args)
     setup_logging(args.loglevel)
-    _logger.debug("Starting crazy calculations...")
-    print("Coming soon")
-    _logger.info("Script ends here")
+    auth = HTTPBasicAuth(args.user, args.psswd)
+    orthanc = Orthanc(args.url, auth=auth)
+    export_stable_study(orthanc, args.study_id, args.outdir)
 
 
 def run():
