@@ -30,7 +30,7 @@ __license__ = "mit"
 _logger = logging.getLogger(__name__)
 
 
-def normalize_path(s):
+def normalize_string(s):
     s = re.sub('[^a-zA-Z0-9-/-: ]', '_', s)
     s = s.replace(' ', '_')
     return s.lower()
@@ -53,7 +53,7 @@ def export_stable_study(orthanc, study_id, outdir):
 
     series = study_json["Series"]
                                 
-    study_path =  normalize_path(outdir + '/' + labname + '/' + study_dicom_tags["StudyDate"] + '_' + study_dicom_tags["StudyDescription"])
+    study_path =  normalize_string(outdir + '/' + labname + '/' + study_dicom_tags["StudyDate"] + '_' + study_dicom_tags["StudyDescription"])
 
     _logger.info("--------------------------------------------")
     _logger.info("Study Path " + study_path)
@@ -62,6 +62,9 @@ def export_stable_study(orthanc, study_id, outdir):
 
     if not os.path.exists(study_path):
         os.makedirs(study_path)
+
+    subject_dict = {}
+    subject_id = 0
 
     for s in series:
 
@@ -74,18 +77,29 @@ def export_stable_study(orthanc, study_id, outdir):
 
 
         for i in instances:
-            instance_tags = orthanc.get_instance_simplified_tags(instances[0])
+            instance_tags = orthanc.get_instance_simplified_tags(i)
 
-            dicom_path = normalize_path(study_path + '/' + "part-" + instance_tags["PatientName"] 
-                                                   + '/' + "ses-" + series_dicom_tags["SeriesDescription"])
+            patient_name = normalize_string(instance_tags["PatientName"])
+            
+            if not (patient_name in subject_dict):
+                subject_id = subject_id + 1
+                subject_dict[patient_name] = format(subject_id, '03d')
+            
+            dicom_path = normalize_string(study_path + '/' + "sub-" + subject_dict[patient_name] )
+                                                #    + '/' + "ses-" + series_dicom_tags["SeriesDescription"])
             
             if not os.path.exists(dicom_path):
                 os.makedirs(dicom_path)
 
+            filename = normalize_string(  series_dicom_tags["SeriesDescription"] + '-' 
+                                        + series_dicom_tags["SeriesNumber"] + '-'
+                                        + instance_tags["InstanceNumber"] + '.dcm'
+                                        )
+            _logger.debug("Dicom filename " + filename)
 
             dicom = orthanc.get_instance_file(i)
             # Write to the file
-            f = open(dicom_path  + '/' + i + '.dcm', 'wb')
+            f = open(dicom_path  + '/' + filename, 'wb')
             for chunk in dicom:
                 f.write(chunk)
             f.close()
