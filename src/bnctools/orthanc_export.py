@@ -18,6 +18,7 @@ import os
 import os.path
 import sys
 import re
+import json
 from requests.auth import HTTPBasicAuth
 from orthanc_rest_client import Orthanc
 
@@ -92,19 +93,22 @@ def export_stable_study(orthanc, study_id, outdir):
                 os.makedirs(dicom_path)
 
             filename = normalize_string(  series_dicom_tags["SeriesDescription"] + '-' 
-                                        + series_dicom_tags["SeriesNumber"] + '-'
-                                        + instance_tags["InstanceNumber"] + '.dcm'
-                                        )
+                                        + 'series' + series_dicom_tags["SeriesNumber"] + '-'
+                                        + 'instance' + instance_tags["InstanceNumber"] )
             _logger.debug("Dicom filename " + filename)
 
             dicom = orthanc.get_instance_file(i)
             # Write to the file
-            f = open(dicom_path  + '/' + filename, 'wb')
+            f = open(dicom_path  + '/' + filename + '.dcm', 'wb')
             for chunk in dicom:
                 f.write(chunk)
             f.close()
 
         _logger.info("--------------------------------------------")
+
+    # save the subject dictionary to json
+    with open(study_path + 'subject-dict.json', 'w') as fp:
+        json.dump(subject_dict, fp, sort_keys=True, indent=4)
 
 
 

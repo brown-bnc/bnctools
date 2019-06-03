@@ -20,7 +20,7 @@ def test_export_stable_study():
     This tests assumes an instace of Orthanc running on http://localhost:8042/
     """
 
-    study_id = "d3fc1b48-73ba3acd-30b5ff85-ea27fa65-e3550bf4"
+    study_id = "0e16a034-87328dd8-ab6277ec-5c5658bd-4734b513"
     auth = HTTPBasicAuth("orthanc", "orthanc")
     outdir = "deleteme"
     orthanc = Orthanc("http://localhost:8042/", auth=auth)
@@ -32,4 +32,4 @@ def test_export_stable_study():
 
     files = glob.glob(outdir + "**/**/*.dcm", recursive=True)
 
-    assert len(files) == 5
+    assert len(files) == 183
