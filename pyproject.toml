@@ -9,13 +9,17 @@ python = "^3.7"
 argparse = "^1.4"
 orthanc-rest-client = "^0.5.6"
 requests = "^2.22"
+python-dotenv = "^0.10.3"
+flask_restful = "^0.3.7"
+flask = "^1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
+
+[tool.poetry.scripts]
+orthanc_export = "bnctools.orthanc_export:run"
 
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
-[tool.poetry.scripts]
-orthanc_export = "bnctools.orthanc_export:run"
